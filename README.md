@@ -203,11 +203,24 @@ It return a promise thus we need to use await. Bcrypt.hash() is hashed any passw
 
 ##### Password hashing
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = async(password) => {
+
+        try {
+            return await bcrypt.hash(password,10);
+        } catch (error) {
+            return error;
+        }
+    }
 
 ##### Compare input password of the user with the hashed password of the database
 
-    if (await bcrypt.compare(password, user.password)) {/...}
+    const verifyPassword = async(inputPassword,hashPassword) => {
+        try {
+            return await bcrypt.compare(inputPassword,hashPassword);
+        } catch (error) {
+            return error;
+        }
+    }
 
 Here 'password' is input password & 'user.password' is hashed password
 
