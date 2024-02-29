@@ -276,6 +276,96 @@ Make a special charecter escape function in utilities folder and named as escape
         }
     }
 
+### Filter controller
+
+    api : http://localhost:4000/product/all
+
+    url : http://localhost:4000/product/all?slug=&minPrice=&maxPrice=&from=&to=&page=&limit=
+
+code below...
+
+    const getProduct = async(req,res) => {
+
+        try {
+
+            const { slug , minPrice, maxPrice, from, to, sort } = req.query;
+
+            const queryObject = {};
+
+            if(slug){
+                queryObject.slug = slug;
+            }
+
+            if(minPrice || maxPrice){
+
+                queryObject.price = {};
+
+                if(minPrice && !isNaN(parseInt(minPrice))){
+                    queryObject.price.$gte = parseInt(minPrice);
+                }
+                if(maxPrice && !isNaN(parseInt(maxPrice))){
+                    queryObject.price.$lte = parseInt(maxPrice);
+                }
+            }
+
+            if(from){
+
+                const startDate = formatDate(from);
+
+                if(startDate){
+
+                    let date = new Date(startDate);
+                    date.setHours(0,0,0,0);
+                    queryObject.updatedAt = { $gte: date };
+                }
+            }
+
+            if(to){
+
+                const endDate = formatDate(to);
+
+                if(endDate){
+
+                    let date = new Date(endDate);
+                    date.setHours(0,0,0,0);
+                    date.setDate(date.getDate() + 1);
+
+                    if (queryObject.updatedAt) {
+
+                        queryObject.updatedAt.$lt = date;
+
+                    } else {
+
+                        queryObject.updatedAt = { $lt: date };
+
+                    }
+                }
+            }
+
+
+            //@get the productObject for sorting
+            let productData = productModel.find(queryObject).
+                                populate({path:'categoryId subCategoryId' , select:'category subCategory'});
+
+
+            //@default sort by selling count
+            let sortBy = "-sell";
+            if(sort){
+                sortBy = sort.replace(","," ");
+            }
+
+            productData = productData.sort(sortBy);
+
+            //@apply pagination
+            productData = await pagination(req.query.page,req.query.limit,productData);
+
+            successResponse(200,`${productData.length} product found !`,productData,res);
+
+        } catch (error) {
+            errorResponse(error,res);
+        }
+    }
+
 ### Format Date
 
 ##### Suppose, 'sDate' is a const variable need to change the format.
