@@ -275,3 +275,26 @@ Make a special charecter escape function in utilities folder and named as escape
             errorResponse(error, res);
         }
     }
+
+### Format Date
+
+##### Suppose, 'sDate' is a const variable need to change the format.
+
+    const startDate = formatDate(sDate);
+
+##### formateDate funtion is below.
+
+    const moment = require("moment");
+
+    const formatDate = function(date){
+
+        const parseDate = moment(date,'DD-MM-YYYY',true);
+
+        if(parseDate.isValid()){
+            return parseDate.format('YYYY-MM-DD');
+        }
+        else {
+            console.log("Invalid date format !");
+            return;
+        }
+    }
