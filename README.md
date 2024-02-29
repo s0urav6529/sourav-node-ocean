@@ -366,6 +366,23 @@ code below...
         }
     }
 
+### pagination
+
+    const pagination = async (pageNo, pageLimit, data)=>{
+
+        try {
+
+            const page = parseInt(pageNo) || 1;
+            const limit = parseInt(pageLimit) || 20;
+            const skip = (page - 1) * limit;
+
+            return await data.skip(skip).limit(limit);
+
+        } catch (error) {
+            return error;
+        }
+    }
+
 ### Format Date
 
 ##### Suppose, 'sDate' is a const variable need to change the format.
