@@ -44,3 +44,45 @@ At first create a git repository in github. Then copy the SSH configuration and 
     randomstring
     sslcommerz-lts
     twilio
+
+##### Go to pakage.json and change this script part
+
+    "scripts": {
+        "start": "NODE_ENV=development nodemon app.js", or
+        "start": "nodemon app.js",
+        "prod": "NODE_ENV=production node app.js",
+        "test": "mocha test/integration/fileRoutes.test.js",
+    },
+
+##### For uninstall a npm package 📦
+
+    npm uninstall package-name
+
+##### For run project
+
+    npm start
+
+##### Create .env file paste this code (To access this file data use process.env.PORT/APP...etc)
+
+    PORT=5000
+    NODE_ENV = development
+    APP_NAME=
+    MONGO_CONNECTION_STRING=mongodb://localhost/<databasename>
+    MONGOURI=mongodb+srv://Foodline:<password>@cluster0.szpnieh.mongodb.net/<databasename>?retryWrites=true&w=majority [for mongo atlas]
+    COOKIE_SECRET=from the below (Cookie secret link)
+    JWT_ACCESS_TOKEN_SECRET=from the below (jwt link)
+    JWT_EXPIRY=86400000  // as your choice in milisecond
+    COOKIE_NAME= anything
+    APP_URL=http://localhost:portno
+
+### 🍪 COOKIE SECRET 🔗
+
+    https://api.wordpress.org/secret-key/1.1/salt/
+
+take one key from the above 🔗 & go below 🔗 to genarate hash key...
+
+    https://emn178.github.io/online-tools/sha1.html
+
+### JWT ACCESS TOKEN SECRET 🔗
+
+    https://www.javainuse.com/jwtgenerator
