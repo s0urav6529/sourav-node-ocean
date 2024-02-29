@@ -37,3 +37,10 @@ At first create a git repository in github. Then copy the SSH configuration and 
     socket.io [for install web socket]
     morgan [HTTP request logger]
     @faker-js/faker [for fake date generate]
+    @aws-sdk/client-s3
+    aws-sdk
+    multer-s3
+    nodemailer [for mail]
+    randomstring
+    sslcommerz-lts
+    twilio
