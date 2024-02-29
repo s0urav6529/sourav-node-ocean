@@ -45,6 +45,10 @@ At first create a git repository in github. Then copy the SSH configuration and 
     sslcommerz-lts
     twilio
 
+##### Force installation of any pakage 📦 after clone a git
+
+    npm i --force
+
 ##### For uninstall a npm package 📦
 
     npm uninstall package-name
