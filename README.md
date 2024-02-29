@@ -54,7 +54,7 @@ At first create a git repository in github. Then copy the SSH configuration and 
     "scripts": {
         "start": "NODE_ENV=development nodemon app.js", or
         "start": "nodemon app.js",
-        "prod": "NODE_ENV=production node app.js",
+        "prod": "NODE_ENV=Dataion node app.js",
         "test": "mocha test/integration/fileRoutes.test.js",
     },
 
@@ -210,3 +210,60 @@ It return a promise thus we need to use await. Bcrypt.hash() is hashed any passw
     if (await bcrypt.compare(password, user.password)) {/...}
 
 Here 'password' is input password & 'user.password' is hashed password
+
+### RegExp for search box
+
+##### search Route
+
+    DataRoute.route("/searchData/:item").get(searchData);
+
+    //url -> http://localhost:8000/Data/searchData/<item>
+
+Make a special charecter escape function in utilities folder and named as escape.
+
+##### utilities/functions.js
+
+    const escapeString = function(str){
+        return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    };
+
+    //exports
+    module.exports = { escapeString };
+
+##### controller for this search
+
+    const { escapeString } = require("../utilities/functions.js")
+
+    const searchData = async(req, res)=>{
+
+        try {
+
+            const searchQuery = new RegExp( escapeString(req.params.item), "i");
+            const price = new RegExp("^" + escape(req.params.item), "i");
+
+            let data ;
+
+            //now search this expession from the database
+            if(req.params.item !== ""){
+
+                data = await model.find({
+                    $or:[{
+                        category: searchQuery
+                    },{
+                        subCategory: searchQuery
+                    },{
+                        dataName: searchQuery
+                    },{
+                        price: price
+                    },{
+                        description: searchQuery
+                    }]
+                });
+            }
+
+            successResponse(200,`${data.length} data's found !`,data,res);
+
+        } catch (error) {
+            errorResponse(error, res);
+        }
+    }
