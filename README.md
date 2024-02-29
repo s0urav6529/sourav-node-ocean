@@ -298,3 +298,103 @@ Make a special charecter escape function in utilities folder and named as escape
             return;
         }
     }
+
+### AWS - s3
+
+##### s3- View in AWS
+
+![Screenshot from 2024-01-31 11-28-29](https://github.com/s0urav6529/softcopy-note/assets/96060029/f76a3102-d50f-4a80-b491-f6f77147dfae)
+
+##### How to access public files form s3
+
+![Screenshot from 2024-01-31 11-35-17](https://github.com/s0urav6529/softcopy-note/assets/96060029/bd397dee-b962-48c1-a673-c9d99e1b6021)
+
+Here, 'piyusgargdev-yt' is the bucket name and 's3.ap-south-1.amazonaws.com' is the service name & rest is the files name or key.
+
+##### How to access private files form s3
+
+![Screenshot from 2024-01-31 11-47-39](https://github.com/s0urav6529/softcopy-note/assets/96060029/a5147e9e-384d-44a2-bb7b-0b4dd2fb8137)
+
+This will not work because there is no presigned URL for access, so we need token & singiture to access.
+
+So, need to make an account on s3 & get access token so that private files can be accessed. Suppose we have an user named 'John' & create an access token of this user so whenever this user tries to access files then s3 checkes if this token is valid for access files , if yes then ok otherwise it will denied again.
+
+![Screenshot from 2024-01-31 11-53-13](https://github.com/s0urav6529/softcopy-note/assets/96060029/576555c7-e956-40d5-bf9d-0f04783b78f7)
+
+There are two types of presigned URL (GET & PUT object)
+
+##### s3 image upload using multer & multer-s3
+
+##### middlewares/fileHandler.js
+
+    //@external module
+    const { S3Client } = require('@aws-sdk/client-s3');
+    const multerS3 = require('multer-s3');
+    const path = require("path");
+
+    //@configure AWS SDK with your credentials and region
+    const awsConfig = {
+        region: process.env.AWS_BUCKET_REGION,
+        credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY,
+            secretAccessKey: process.env.AWS_SECRET_KEY
+        },
+    };
+
+    //@create s3 client instance
+    const s3Client = new S3Client(awsConfig);
+
+    //@create storage configuration
+    const storageConfig = multerS3({
+        s3: s3Client,
+        bucket: process.env.AWS_BUCKET_NAME,
+        acl: 'public-read',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: (req, file, cb) => {
+                const fileExtention = path.extname(file.originalname);
+                const key = file.originalname.replace(fileExtention,"").split(" ").join("-")+ "-" + Date.now() + fileExtention;
+            cb(null, key);
+        },
+    });
+
+    //@exports
+    module.exports = { storageConfig };
+
+##### upload code for any route
+
+    const upload = multer({
+        storage : storageConfig
+    });
+
+    //@for single file upload
+    router.route("/").post(upload.single('file'),(req,res) => {
+
+        //uploaded file url
+        res.send(req.file.location);
+    });
+
+    //@for multiple file upload
+    router.route("/").post(upload.array('files',3),(req,res) => {
+
+        //uploaded file url
+        req.files.map((file)=>{
+            console.log('File uploaded to S3:', file.location);
+        });
+    });
+
+    //@for multipart file upload
+
+    const uploadMultiple = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'document', maxCount: 8 }]);
+
+    app.post('/multipart', uploadMultiple, (req, res) => {
+        try {
+
+            console.log(req.files['photo']);
+            console.log(req.files['document']);
+            res.status(200).send("file uploaded successfully");
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
