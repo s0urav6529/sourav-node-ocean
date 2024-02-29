@@ -213,6 +213,14 @@ Here 'password' is input password & 'user.password' is hashed password
 
 ### RegExp for search box
 
+##### N.B
+
+^: Asserts the start of the string.
+
+$: Asserts the end of the string.
+
+"i": Specifies a case-insensitive match.
+
 ##### search Route
 
     DataRoute.route("/searchData/:item").get(searchData);
