@@ -45,6 +45,10 @@ At first create a git repository in github. Then copy the SSH configuration and 
     sslcommerz-lts
     twilio
 
+##### For uninstall a npm package 📦
+
+    npm uninstall package-name
+
 ##### Go to pakage.json and change this script part
 
     "scripts": {
@@ -54,9 +58,44 @@ At first create a git repository in github. Then copy the SSH configuration and 
         "test": "mocha test/integration/fileRoutes.test.js",
     },
 
-##### For uninstall a npm package 📦
+### Blue print of index.js file
 
-    npm uninstall package-name
+    //@external module
+    const express = require("express");
+    const dotenv = require("dotenv").config();
+    const morgan = require("morgan");
+    const cors = require("cors");
+    const path = require("path");
+    const bodyParser = require("body-parser");
+    const app = express();
+
+    const databaseConnection = require("./configuration/databaseConnection");
+
+    //@connect the database
+    databaseConnection();
+
+    //@useful middleware
+    app
+        .use(cors())
+        .use(bodyParser.json())
+        .use(bodyParser.urlencoded({extended : true }));
+
+    if(process.env.NODE_ENV === "development"){
+        app.use(morgan("dev"));
+    }
+
+    //@set static route
+    app.use(express.static(path.join(__dirname,"public")));
+
+    app
+        .use("/", xRoute)
+        ...
+        ...
+
+    //@start the server
+    app.listen(process.env.PORT,() => {
+        console.log(`App listening in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`);
+    })
 
 ##### For run project
 
