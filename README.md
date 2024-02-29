@@ -542,6 +542,16 @@ There are two types of presigned URL (GET & PUT object)
 
 ### mongoose
 
+# Mongo server:
+
+starts cmd:
+
+    sudo systemctl start mongod
+
+status check cmd:
+
+    systemctl status mongod
+
 ##### populate
 
     const searchAllProduct = async(req,res) => {
