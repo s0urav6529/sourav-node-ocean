@@ -406,6 +406,23 @@ code below...
         }
     }
 
+### slug generator
+
+    const generateSlug = (fullName) => {
+        return fullName.toLowerCase().replace(/\s+/g, "-");
+    };
+
+    const generateSlug = (s1, s2) => {
+
+        let slug = `${s1}%${s2}`;
+        let time = Date.now();
+
+        slug = `${slug}%${time}`;
+
+        return slug.replace(/\s+/g, "-");
+
+    }
+
 ### AWS - s3
 
 ##### s3- View in AWS
