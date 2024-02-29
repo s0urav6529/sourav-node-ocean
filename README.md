@@ -196,3 +196,17 @@ take one key from the above 🔗 & go below 🔗 to genarate hash key...
             errorResponse(error,res);
         }
     };
+
+### bcrypt
+
+It return a promise thus we need to use await. Bcrypt.hash() is hashed any password for protection & also compare the given password with hashed password during the login authentication or any occasion.
+
+##### Password hashing
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+##### Compare input password of the user with the hashed password of the database
+
+    if (await bcrypt.compare(password, user.password)) {/...}
+
+Here 'password' is input password & 'user.password' is hashed password
