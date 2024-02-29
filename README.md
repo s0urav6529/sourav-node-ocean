@@ -14,7 +14,7 @@ At first create a git repository in github. Then copy the SSH configuration and 
 
     npm init →then give the info as instruction
 
-##### Install required external module
+##### Install required external pakage 📦
 
     npm install dotenv [for environment setup]
     express
@@ -125,3 +125,74 @@ take one key from the above 🔗 & go below 🔗 to genarate hash key...
 ### JWT ACCESS TOKEN SECRET 🔗
 
     https://www.javainuse.com/jwtgenerator
+
+### customized http success & error handle
+
+##### utilities/responseHandle.js file
+
+    //@error response
+    const errorResponse = function(error, res) {
+
+        const errorMessage = {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            404: 'Not Found',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+            503: 'Service Unavailable',
+            504: "Gateway Timeout",
+        }[error.code] || error.message;
+
+        res.json({status : error.code, error : errorMessage});
+    };
+
+    //@success response
+    const successResponse = function(code , message, data, res) {
+        const success = {
+            message : message,
+            data : data
+        }
+
+        res.status(code).json({success : success.message, data : success.data});
+    };
+
+    //@throw a new created message
+    const newError = function(code) {
+        const error = new Error("");
+        error.code = code;
+        return error;
+    }
+
+    //@exports
+    module.exports = {  errorResponse,
+                        successResponse,
+                        newError
+                    }
+
+##### invoke the functions from the controller
+
+    const xController = async(req,res) => {
+
+    try {
+            const xData = new adminModel({
+                data....
+            });
+
+            if(xData) {
+
+                await xData.save();
+
+                successResponse(200,"New x added successfully !",xData,res);
+            }else{
+                throw newError(404);
+            }
+
+        } catch (error) {
+            //@customize the error
+            if(error.code === 11000){
+                error.message = "Email already exist !"
+            }
+            errorResponse(error,res);
+        }
+    };
