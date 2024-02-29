@@ -408,9 +408,13 @@ code below...
 
 ### slug generator
 
+##### type-1
+
     const generateSlug = (fullName) => {
         return fullName.toLowerCase().replace(/\s+/g, "-");
     };
+
+##### type-1
 
     const generateSlug = (s1, s2) => {
 
