@@ -398,3 +398,88 @@ There are two types of presigned URL (GET & PUT object)
             res.status(500).send('Internal Server Error');
         }
     });
+
+### mongoose
+
+##### populate
+
+    const searchAllProduct = async(req,res) => {
+
+        try {
+
+            //just load all data from the database
+            const allData = await productModel.find({}).select('productName').
+                            populate({path:'categoryId subCategoryId' , select:'category subCategory'});
+
+            if(allData.length > 0){
+                res.status(200).json({allData,message:"All data loaded successfully !"});
+            }
+            else{
+                res.status(200).json({message:"No data found !"});
+            }
+
+        } catch (error) {
+            res.status(400).json({error,message:"Errors occur during search all products !"});
+        }
+    }
+
+##### Create a virtual 'id' instead of '\_id'
+
+Suppose we have a Schema name 'userSchema'...
+
+    userSchema.virtual('id').get(function(){
+        return this._id.toHexString();
+    });
+    userSchema.set('toJSON',{
+        virtuals:true,
+    });
+
+##### findByIdAndUpdate() Function
+
+The findByIdAndUpdate() function is used to find a matching document, updates it according to the update arg, passing any options, and returns the found document (if any) to the callback.
+
+    const updateDocument = async (id) => {
+    try {
+            const updatedResult = await User.findByIdAndUpdate(
+                { _id: id },
+                {
+                    profession: "Backend Developer",
+                },
+                {
+                    new : true
+                }
+            );
+            console.log(updatedResult);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+##### findOneAndUpdate() Function
+
+    const subCategoryData = await subCategoryModel.findOneAndUpdate(
+        { categoryId : req.params.id },
+        { category : categoryData.category},
+        { new:true}
+    );
+
+##### updateMany() Function
+
+    await subCategoryModel.updateMany(
+        { categoryId : req.params.id },
+        { category : categoryData.category},
+        { new:true}
+    );
+
+##### For delete any object from the array. You should use the 'update' method with the '$pull' operator to remove the specific element from the array.
+
+    const result = await Order.updateOne(
+        { 'orderDetails.orderId': orderId },
+        { $pull: { 'orderDetails': { 'orderId': orderId } } }
+    );
+
+    if (result.matchedCount > 0) {
+        //successful deletation
+    } else {
+        //error
+    }
