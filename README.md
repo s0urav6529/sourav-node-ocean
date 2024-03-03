@@ -228,7 +228,7 @@ It return a promise thus we need to use await. Bcrypt.hash() is hashed any passw
 
 Here 'password' is input password & 'user.password' is hashed password
 
-##### validator
+### validator
 
     https://www.npmjs.com/package//validator
 
