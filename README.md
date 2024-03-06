@@ -232,7 +232,7 @@ Here 'password' is input password & 'user.password' is hashed password
 
     https://www.npmjs.com/package//validator
 
-###### middleware/validationHandler.js
+###### [for any input validation check] middleware/validationHandler.js
 
     //@external module
     const { body , validationResult } = require("express-validator");
@@ -283,6 +283,76 @@ Here 'password' is input password & 'user.password' is hashed password
                         loginValidation,
                         validate
                     }
+
+###### [for role base access ]
+
+During user login set a token in the res header for checking the role of that user.
+
+    const userLogin = async(req, res) => {
+
+        try{
+
+            ...............
+
+            const userPayload = {
+                data : {
+                    id : userData._id,
+                    role : userData.role
+                }
+            }
+
+            const token = createAuthToken(userPayload);
+
+            res.set('token', token);
+
+        }catch(error){
+            return error;
+        }
+    }
+
+###### middleware/routeValidator.js
+
+    const isLogin = async(req, res, next) => {
+
+        try {
+
+            const token = req.headers['token'];
+
+            if(token) {
+
+                const verified = verifyAuthtoken(token);
+
+                if(verified){
+                    const decoded = decodeAccount(token);
+                    req.user = decoded.data;
+                    next();
+                }
+            }else {
+                res.status(404).json({message : "You are not logged in !"});
+            }
+
+        } catch (error) {
+            errorResponse(error, res);
+        }
+
+    }
+
+    const requiredRole = function( roleArray ){
+
+        try {
+
+            return function(req, res, next){
+
+                if(req.user && roleArray.includes(req.user.role)){
+                    next();
+                }else{
+                    res.status(404).json({message : "Unauthorized access !"});
+                }
+            }
+        } catch (error) {
+            errorResponse(error, res);
+        }
+    }
 
 ### RegExp for search box
 
