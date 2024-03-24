@@ -303,7 +303,14 @@ During user login set a token in the res header for checking the role of that us
 
             const token = createAuthToken(userPayload);
 
-            res.set('token', token);
+            const authToken = {
+                id : userData.id,
+                email : userData.email,
+                role : userData.role,
+                token
+            }
+
+            res.status(200).json(authToken);
 
         }catch(error){
             return error;
@@ -316,25 +323,28 @@ During user login set a token in the res header for checking the role of that us
 
         try {
 
-            const token = req.headers['token'];
+            //@get the authToken from Bearer Token
+            let authToken = req.get('Authorization');
 
-            if(token) {
+            if(authToken){
 
-                const verified = verifyAuthtoken(token);
+                authToken = authToken.split(' ')[1];
 
-                if(verified){
-                    const decoded = decodeAccount(token);
-                    req.user = decoded.data;
+                authToken = functions.verifyAuthToken(authToken);
+
+                if(authToken){
+
+                    req.account = authToken.data;
                     next();
                 }
-            }else {
-                res.status(404).json({message : "You are not logged in !"});
+            }
+            else{
+                throw responseHandler.newError(400);
             }
 
         } catch (error) {
-            errorResponse(error, res);
+            return res.status(400).json({Error:error.message,message:"Invalid Permission"});
         }
-
     }
 
     const requiredRole = function( roleArray ){
@@ -343,14 +353,14 @@ During user login set a token in the res header for checking the role of that us
 
             return function(req, res, next){
 
-                if(req.user && roleArray.includes(req.user.role)){
+                if(req.account && roleArray.includes(req.account.role)){
                     next();
                 }else{
-                    res.status(404).json({message : "Unauthorized access !"});
+                    return res.status(400).json({message:"Invalid Permission !"});
                 }
             }
         } catch (error) {
-            errorResponse(error, res);
+            return res.status(400).json({Error:error.message,message:"Invalid Permission"});
         }
     }
 
