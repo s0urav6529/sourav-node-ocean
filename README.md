@@ -774,3 +774,7 @@ The findByIdAndUpdate() function is used to find a matching document, updates it
     } else {
         //error
     }
+
+### Use Redis in node
+
+    https://redis.io/docs/connect/clients/nodejs/
