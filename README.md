@@ -606,7 +606,11 @@ There are two types of presigned URL (GET & PUT object)
 
 ##### s3 image upload using multer & multer-s3
 
-##### middlewares/fileHandler.js
+First of all install below pakage
+
+    npm install @aws-sdk/client-s3 multer-s3
+
+##### middlewares/s3Handler.js
 
     //@external module
     const { S3Client } = require('@aws-sdk/client-s3');
@@ -633,6 +637,8 @@ There are two types of presigned URL (GET & PUT object)
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: (req, file, cb) => {
                 const fileExtention = path.extname(file.originalname);
+
+                //@make unique filename
                 const key = file.originalname.replace(fileExtention,"").split(" ").join("-")+ "-" + Date.now() + fileExtention;
             cb(null, key);
         },
@@ -643,28 +649,29 @@ There are two types of presigned URL (GET & PUT object)
 
 ##### upload code for any route
 
+    const { storageConfig } = require("../")
+
     const upload = multer({
         storage : storageConfig
     });
 
-    //@for single file upload
+    //@for single file upload in one field
     router.route("/").post(upload.single('file'),(req,res) => {
 
-        //uploaded file url
+        //@uploaded file url in database
         res.send(req.file.location);
     });
 
-    //@for multiple file upload
+    //@for multiple file upload in one field
     router.route("/").post(upload.array('files',3),(req,res) => {
 
-        //uploaded file url
+        //@uploaded file url in database
         req.files.map((file)=>{
             console.log('File uploaded to S3:', file.location);
         });
     });
 
-    //@for multipart file upload
-
+    //@for multipart file upload in various field
     const uploadMultiple = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'document', maxCount: 8 }]);
 
     app.post('/multipart', uploadMultiple, (req, res) => {
@@ -778,3 +785,15 @@ The findByIdAndUpdate() function is used to find a matching document, updates it
 ### Use Redis in node
 
     https://redis.io/docs/connect/clients/nodejs/
+
+To install node-redis, run:
+
+    npm install redis
+
+Configure code
+
+    const { createClient } = require("redis");
+    const redisClient = createClient();
+
+    redisClient.on('error', err => console.log('Redis Client Error', err));
+    redisClient.connect();
