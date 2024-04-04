@@ -656,7 +656,8 @@ First of all install below pakage
     });
 
 for single file upload in one field
-router.route("/").post(upload.single('file'),(req,res) => {
+
+    router.route("/").post(upload.single('file'),(req,res) => {
 
         //@uploaded file url in database
         res.send(req.file.location);
