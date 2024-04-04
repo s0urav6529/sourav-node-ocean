@@ -655,8 +655,8 @@ First of all install below pakage
         storage : storageConfig
     });
 
-    //@for single file upload in one field
-    router.route("/").post(upload.single('file'),(req,res) => {
+for single file upload in one field
+router.route("/").post(upload.single('file'),(req,res) => {
 
         //@uploaded file url in database
         res.send(req.file.location);
@@ -666,7 +666,8 @@ req.file below:
 
 ![Screenshot from 2024-04-02 12-28-47](https://github.com/smartfieldservice/hrm-server/assets/96060029/92777230-4ae7-4dd7-9b9e-a56cb2c935d8)
 
-    //@for multiple file upload in one field
+for multiple file upload in one field
+
     router.route("/").post(upload.array('files',3),(req,res) => {
 
         //@uploaded file url in database
@@ -711,7 +712,8 @@ practical use of "req.files" that save in database
         }
     }
 
-    //@for multipart file upload in various field
+for multipart file upload in various field
+
     const uploadMultiple = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'document', maxCount: 8 }]);
 
     app.post('/multipart', uploadMultiple, (req, res) => {
