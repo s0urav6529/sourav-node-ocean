@@ -662,6 +662,8 @@ First of all install below pakage
         res.send(req.file.location);
     });
 
+req.file below:
+
 ![Screenshot from 2024-04-02 12-28-47](https://github.com/smartfieldservice/hrm-server/assets/96060029/92777230-4ae7-4dd7-9b9e-a56cb2c935d8)
 
     //@for multiple file upload in one field
@@ -672,6 +674,10 @@ First of all install below pakage
             console.log('File uploaded to S3:', file.location);
         });
     });
+
+req.files below:
+
+![Screenshot from 2024-04-04 12-44-39](https://github.com/s0urav6529/sourav-node-ocan/assets/96060029/9ebfa2e2-aabd-48bd-b176-ac85c5649acf)
 
     //@for multipart file upload in various field
     const uploadMultiple = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'document', maxCount: 8 }]);
