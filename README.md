@@ -679,6 +679,38 @@ req.files below:
 
 ![Screenshot from 2024-04-04 12-44-39](https://github.com/s0urav6529/sourav-node-ocan/assets/96060029/9ebfa2e2-aabd-48bd-b176-ac85c5649acf)
 
+practical use of "req.files" that save in database
+
+    const createDocument = async( req, res) => {
+
+        try {
+
+            const { title, description, owner }= req.body;
+
+            //@create an array of file locations
+            const allFiles = req.files.map((file) => {
+                return file.location;
+            })
+
+            console.log(req.files)
+
+            const newDocument = new Document({
+                title ,
+                filesName : allFiles,
+                description ,
+                owner ,
+                slug : generateSlug(title)
+            });
+
+            await newDocument.save();
+
+            res.status(200).json({ message : "New document added successfully !", data : newDocument });
+
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
     //@for multipart file upload in various field
     const uploadMultiple = upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'document', maxCount: 8 }]);
 
