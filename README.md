@@ -748,7 +748,10 @@ status check cmd:
 
         try {
 
-            //just load all data from the database
+            //@just load all data from the database
+            //@here in populate (In path (categoryId & subCategoryId) is the key to relation with the category, subCategory model
+            //@and in select (category & subCategory) is the property of category & subCategory Model)
+
             const allData = await productModel.find({}).select('productName').
                             populate({path:'categoryId subCategoryId' , select:'category subCategory'});
 
@@ -773,6 +776,14 @@ Suppose we have a Schema name 'userSchema'...
     });
     userSchema.set('toJSON',{
         virtuals:true,
+    });
+
+##### create() condition wise
+
+    const addLeaveToEmployee = await TotalLeaveOfUser.create({
+        employeeId,
+        totalSick: leavetype === 'sick' ? totaldays : 0,
+        totalCasual: leavetype === 'casual' ? totaldays : 0
     });
 
 ##### findByIdAndUpdate() Function
@@ -803,6 +814,19 @@ The findByIdAndUpdate() function is used to find a matching document, updates it
         { category : categoryData.category},
         { new:true}
     );
+
+@increment using condition
+
+    const addLeaveToEmployee = await TotalLeaveOfUser.findOneAndUpdate({
+            employeeId
+        },{
+            $inc: {
+                totalSick: leavetype === 'sick' ? totaldays : 0,
+                totalCasual: leavetype === 'casual' ? totaldays : 0
+            }
+        },{
+            new : true
+    });
 
 ##### updateMany() Function
 
