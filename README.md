@@ -744,6 +744,8 @@ status check cmd:
 
 ##### populate
 
+Type - 1
+
     const searchAllProduct = async(req,res) => {
 
         try {
@@ -766,6 +768,31 @@ status check cmd:
             res.status(400).json({error,message:"Errors occur during search all products !"});
         }
     }
+
+Type - 2
+
+    const userInformation = asyncHandler(async(req, res) => {
+
+        try{
+
+            let user = User.findById({ _id : req.query.id }).
+                        populate({ path : 'concernId departmentId', select : ['name', 'name']});
+
+            if(!user){
+                res.status(404).json({ message: "Not found" });
+            }else{
+
+                //@details of the user
+                user = await user;
+
+                res.status(200).json({ message: "User found", data : user });
+            }
+
+        }catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+
+    });
 
 ##### Create a virtual 'id' instead of '\_id'
 
