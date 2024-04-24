@@ -400,7 +400,7 @@ Make a special charecter escape function in utilities folder and named as escape
         try {
 
             const searchQuery = new RegExp( escapeString(req.params.item), "i");
-            const price = new RegExp("^" + escape(req.params.item), "i");
+            const price = new RegExp("^" + escapeString(req.params.item), "i");
 
             let data ;
 
