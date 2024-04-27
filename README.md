@@ -742,6 +742,86 @@ status check cmd:
 
     systemctl status mongod
 
+##### aggregate
+
+Type-1
+
+    const searchQuery = new RegExp( escapeString(req.params.clue), "i");
+
+    const leaves = await Leave.aggregate([
+            {
+                $lookup: {
+                    from: "concerns",
+                    localField: "concernId",
+                    foreignField: "_id",
+                    as: "concern"
+                }
+            },
+            {
+                $lookup: {
+                    from: "departments",
+                    localField: "departmentId",
+                    foreignField: "_id",
+                    as: "department"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "employeeId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { 'concern.name': searchQuery },
+                        { 'department.name': searchQuery },
+                        { 'user.name': searchQuery },
+                        { leavetype: searchQuery },
+                    ]
+                }
+            }
+        ]);
+
+Type-2
+
+    const { ObjectId } = require('mongodb');
+
+    leaves = await Leave.aggregate([
+            {
+                $lookup: {
+                    from: "departments",
+                    localField: "departmentId",
+                    foreignField: "_id",
+                    as: "department"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "employeeId",
+                    foreignField: "_id",
+                    as: "user"
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        { concernId : new ObjectId(concernId) },
+                        {
+                            $or: [
+                                { 'department.name': searchQuery },
+                                { 'user.name': searchQuery },
+                                { leavetype: searchQuery }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]);
+
 ##### populate
 
 Type - 1
