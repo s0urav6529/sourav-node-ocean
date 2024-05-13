@@ -730,6 +730,16 @@ for multipart file upload in various field
         }
     });
 
+### Random Id generator
+
+For cryptographic or security-related tasks, Node.js provides the crypto module which includes more robust methods for generating random numbers. For security-sensitive applications, use the crypto module.
+
+    const crypto = require('crypto');
+    let randomBytes = crypto.randomBytes(3).toString('hex');
+    console.log(randomBytes);
+
+![Screenshot from 2024-05-13 12-03-36](https://github.com/s0urav6529/sourav-node-ocan/assets/96060029/d9fc44f7-7c2b-43de-a6cd-b85532c85c73)
+
 ### mongoose
 
 ##### Mongo server:
