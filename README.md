@@ -1,4 +1,4 @@
-# nodejs documentaion
+# nodejs documentaions
 
 ### Open a new node project on vs-code:
 
