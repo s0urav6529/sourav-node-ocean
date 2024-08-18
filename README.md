@@ -14,6 +14,8 @@ At first create a git repository in github. Then copy the SSH configuration and 
 
     npm init →then give the info as instruction
 
+That will create a json package...
+
 ##### Install required external pakage 📦
 
     npm install dotenv [for environment setup]
