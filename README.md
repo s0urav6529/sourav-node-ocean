@@ -2,7 +2,7 @@
 
 ### Open a new node project on vs-code:
 
-At first create a git repository in github. Then copy the SSH configuration and go to the main terminal...
+At first create a git repository in github. Then copy the SSH configuration & go to the main terminal...
 
     git clone <ssh git repository link>
 
