@@ -22,6 +22,20 @@
 
 # Exists
 
+If a document exists, then it will return \_id field.
+
+        { "_id": "65d8f3b5c9e8a123456789ab" }
+
+otherwise it return null.
+
+#### True or false
+
+If you only need a boolean result.
+
+    const exists = !!(await SubCategory.exists({ slug }));
+
+This will return true or false.
+
 #### Type 1:
 
     const exists = await Category.exists({ slug });
