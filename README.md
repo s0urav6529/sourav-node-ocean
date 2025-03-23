@@ -1,67 +1,31 @@
-# Session During transaction
+# create
 
-For Recommended code
+    await Category.create({ category: functions.reduceMultipleSpaces(category),
+                            categoryDescription,
+                            slug
+                        });
 
-    https://onthor.medium.com/understanding-mongoose-transactions-and-rollbacks-f074078ff604
+# Find by id
 
-For code structure
+#### Type 1:
 
-    https://blog.tericcabrel.com/how-to-use-mongodb-transaction-in-node-js/
+    const category = await Category.findById({ _id : req.query.id })
+                        .select("category categoryDescription categoryImage slug")
+                        .lean();
 
+#### Type 2:
 
-# Example 
+    const _id = req.query.id;
+    const category = await Category.findById( _id )
+                        .select("category categoryDescription slug")
+                        .lean();
 
+# Exists
 
-    const conn = require("../models/connection"); // Database connection
-    const Customer = require("../models/customer.model");
-    const BillingAddress = require("../models/billingAddress.model");
+#### Type 1:
 
-    const registerCustomerWithAddress = async () => {
+    const exists = await Category.exists({ slug });
 
-        const session = await conn.startSession();
+#### Type 2:
 
-        or 
-
-        const session = await mongoose.startSession();
-
-        try {
-
-            session.startTransaction();
-
-            const customer = await Customer.create(
-                [
-                    {
-                        name: 'John Wick',
-                        email: 'john.wick@example.com',
-                    },
-                ],
-                { session }
-            );
-
-            await BillingAddress.create(
-                [
-                    {
-                        address: '123 Continental Hotel, New York',
-                        customer_id: customer[0]._id,
-                    },
-                ],
-                { session }
-            );
-
-            // Commit the transaction
-            await session.commitTransaction();
-            console.log('Transaction successful: Customer and Billing Address created.');
-
-        } catch (error) {
-
-            // Rollback the transaction in case of an error
-            await session.abortTransaction();
-            console.error('Transaction failed:', error);
-        } 
-        finally {
-
-            // Ending the session
-            await session.endSession();
-        }
-        
-    };
+    const result = await Category.exists({ _id : { $ne : categoryExists._id }, slug });
