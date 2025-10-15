@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
 
 app.set("io", io);
 
-const startApp = async () => {
+const startServer = async () => {
     try {
         await db();
         await App(app);
@@ -59,4 +59,4 @@ const startApp = async () => {
     }
 };
 
-startApp();
+startServer();
