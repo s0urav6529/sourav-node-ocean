@@ -1,7 +1,6 @@
 const { body } = require('express-validator');
 
-const validationRules = [
-    
+const doctorRule = [  
     body('name').custom((value, { req }) => {
         if (!value || value.trim() === '') {
             throw new Error('Name is required!');
@@ -92,4 +91,4 @@ const validationRules = [
 ];
 
 //@exports
-module.exports = { validationRules }
+module.exports = { doctorRules }

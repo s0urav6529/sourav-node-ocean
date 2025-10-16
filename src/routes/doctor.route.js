@@ -1,5 +1,5 @@
 const doctorRoute = require("express").Router();
-const { doctorImageUpload } = require("../../utilities/utilityExporter");
+const { doctorImageUpload } = require("../utils/init");
 
 doctorRoute
         .route("/")

@@ -7,7 +7,7 @@ const dashboardRouter = express.Router();
 
 //@external module
 const { specialistRoute,
-        userRoute } = require("../routes/routeExporter");
+        userRoute } = require("./routes/routeExporter");
 
 module.exports = async(app) => {
 
