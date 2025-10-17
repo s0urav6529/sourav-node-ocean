@@ -41,9 +41,9 @@ const generateRandomNumber = function (){
 
 //@exports
 module.exports = {  generateAuthToken,
-    generateSlug,
-    pagination,
-    escapeString,
-    generateOTP,
-    generateRandomNumber
-}
+                    generateSlug,
+                    pagination,
+                    escapeString,
+                    generateOTP,
+                    generateRandomNumber
+                }

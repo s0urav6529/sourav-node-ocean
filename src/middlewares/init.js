@@ -1,12 +1,12 @@
 const s3Upload = require("./common/s3Upload");
-const otpSent = require("./common/otpSent");
 
+const otp = require("./common/sslwirelessOTP.middleware");
 const validation = require("./common/validation.middleware");
 const doctorMiddleware = require("./doctor.middleware");
 const sessionMiddleware = require("./common/session.middleware")
 
 module.exports = {  s3Upload, 
-                    otpSent,
+                    otp,
                     validation,
                     doctorMiddleware,
                     sessionMiddleware

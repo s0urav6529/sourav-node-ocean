@@ -1,4 +1,4 @@
-const userController = require('./user/userController');
+const doctorController = require('./doctor.controller');
 
 //@exports
-module.exports = {  userController }
+module.exports = {  doctorController }
